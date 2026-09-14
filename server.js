@@ -22,7 +22,13 @@ app.use("/api/v1", Auth);
 app.use("/api/v1/Hospital", HospitalList);
 app.use("/api/v1/Book",Booking);
 app.use("/api/v1/Bed", Bed);
-app.use("/api/v1" , Dashboard)
+app.use("/api/v1" , Dashboard);
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "SwasthSewa API is running",
+  });
+});
 
 
 
