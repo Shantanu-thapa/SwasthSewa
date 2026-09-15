@@ -41,7 +41,7 @@ const hospitals = [
 
 const seedDatabase = async () => {
   try {
-    const hospitalCount = await Hospital.countDocuments();
+    const hospitalCount = await Hospital.estimatedDocumentCount();
 
     if (hospitalCount > 0) {
       console.log("Database already seeded");
