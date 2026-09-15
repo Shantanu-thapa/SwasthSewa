@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(cors());
 
 const connectDB = require("./config/db")
-connectDB();  
 
 //route connection 
 const Auth = require("./routes/Patient");
@@ -26,6 +25,14 @@ app.use("/api/v1/Book",Booking);
 app.use("/api/v1/Bed", Bed);
 app.use("/api/v1" , Dashboard);
 
+const startServer = async () => {
+
+await connectDB();
+ 
+
+await seedDatabase();
+
+
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "SwasthSewa API is running",
@@ -38,6 +45,8 @@ app.get("/", (req, res) => {
 app.listen(PORT , () => {
     console.log(`APP is Running ${PORT}`)
 });
+
+  startServer();
 
 
 
