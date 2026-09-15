@@ -1,10 +1,6 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-
 const Hospital = require("./model/hospital");
 const Bed = require("./model/bedModel");
 
-dotenv.config();
 const hospitals = [
   {
     name: "Swasthya Care Hospital",
@@ -45,24 +41,15 @@ const hospitals = [
 
 const seedDatabase = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    const hospitalCount = await Hospital.countDocuments();
 
-    console.log("MongoDB connected");
+    if (hospitalCount > 0) {
+      console.log("Database already seeded");
+      return;
+    }
 
-    // Clear existing hospital and bed data
-    await Bed.deleteMany({});
-    await Hospital.deleteMany({});
-
-    console.log("Old hospital and bed data cleared");
-
-    // Create hospitals
     const createdHospitals = await Hospital.insertMany(hospitals);
 
-    console.log(
-      `${createdHospitals.length} hospitals created`
-    );
-
-    // Create beds for each hospital
     const beds = [];
 
     createdHospitals.forEach((hospital) => {
@@ -80,15 +67,10 @@ const seedDatabase = async () => {
 
     await Bed.insertMany(beds);
 
-    console.log(`${beds.length} beds created`);
-
-    console.log("Hospital and bed seeding completed successfully");
-
-    process.exit(0);
+    console.log("Initial hospitals and beds created");
   } catch (error) {
     console.error("Error seeding database:", error);
-    process.exit(1);
   }
 };
 
-seedDatabase();
+module.exports = seedDatabase;
